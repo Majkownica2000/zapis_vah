@@ -11,4 +11,15 @@ class AppTheme {
       ),
     );
   }
+
+  static ThemeData dark() {
+    return ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo, brightness: Brightness.dark),
+      useMaterial3: true,
+      inputDecorationTheme: const InputDecorationTheme(
+        border: OutlineInputBorder(),
+        isDense: true,
+      ),
+    );
+  }
 }

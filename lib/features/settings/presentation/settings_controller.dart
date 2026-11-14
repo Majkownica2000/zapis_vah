@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/settings_repository.dart';
@@ -5,7 +6,8 @@ import '../../../core/providers.dart';
 
 class SettingsState {
   final String unit;
-  SettingsState({required this.unit});
+  final ThemeMode themeMode;
+  SettingsState({required this.unit, required this.themeMode});
 }
 
 class SettingsController extends StateNotifier<AsyncValue<SettingsState>> {
@@ -17,12 +19,26 @@ class SettingsController extends StateNotifier<AsyncValue<SettingsState>> {
 
   Future<void> _load() async {
     final unit = await _repo.getUnit();
-    state = AsyncValue.data(SettingsState(unit: unit));
+    final themeMode = await _repo.getThemeMode();
+    state = AsyncValue.data(SettingsState(unit: unit, themeMode: themeMode));
   }
 
   Future<void> setUnit(String unit) async {
     await _repo.setUnit(unit);
-    state = AsyncValue.data(SettingsState(unit: unit));
+    final current = state.valueOrNull;
+    state = AsyncValue.data(SettingsState(
+      unit: unit,
+      themeMode: current?.themeMode ?? ThemeMode.system,
+    ));
+  }
+
+  Future<void> setThemeMode(ThemeMode mode) async {
+    await _repo.setThemeMode(mode);
+    final current = state.valueOrNull;
+    state = AsyncValue.data(SettingsState(
+      unit: current?.unit ?? 'kg',
+      themeMode: mode,
+    ));
   }
 }
 
