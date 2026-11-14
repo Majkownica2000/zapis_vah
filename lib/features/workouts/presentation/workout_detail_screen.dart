@@ -84,7 +84,7 @@ class _WorkoutDetailScreenState extends ConsumerState<WorkoutDetailScreen> {
           IconButton(
             icon: const Icon(Icons.edit_note),
             tooltip: 'Upravit',
-            onPressed: () => context.push('/workout/${widget.workoutId}'),
+            onPressed: () => context.push('/workout/${widget.workoutId}').then((_) => _reload()),
           ),
           IconButton(
             icon: const Icon(Icons.copy),
