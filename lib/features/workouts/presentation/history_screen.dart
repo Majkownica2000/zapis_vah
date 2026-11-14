@@ -42,7 +42,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                 title: Text(w.displayName),
                 subtitle: Text('${w.date.toLocal().toString().split(' ').first}${w.note != null && w.note!.isNotEmpty ? "  –  ${w.note}" : ""}'),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => context.go('/history/${w.id}'),
+                onTap: () => context.push('/history/${w.id}'),
               );
             },
           );

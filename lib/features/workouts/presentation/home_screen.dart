@@ -16,15 +16,15 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.fitness_center),
-            onPressed: () => context.go('/exercises'),
+            onPressed: () => context.push('/exercises'),
           ),
           IconButton(
             icon: const Icon(Icons.history),
-            onPressed: () => context.go('/history'),
+            onPressed: () => context.push('/history'),
           ),
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () => context.go('/settings'),
+            onPressed: () => context.push('/settings'),
           ),
         ],
       ),
@@ -56,7 +56,7 @@ class HomeScreen extends ConsumerWidget {
                   if (ok == true && context.mounted) {
                     final id = await repo.createWorkout(
                         name: nameCtrl.text.trim().isEmpty ? null : nameCtrl.text.trim());
-                    if (context.mounted) context.go('/workout/$id');
+                    if (context.mounted) context.push('/workout/$id');
                   }
                 },
                 icon: const Icon(Icons.add),
@@ -73,7 +73,7 @@ class HomeScreen extends ConsumerWidget {
                       title: Text(w.displayName),
                       subtitle: Text(w.date.toLocal().toString().split(' ').first),
                       trailing: const Icon(Icons.chevron_right),
-                      onTap: () => context.go('/history/${w.id}'),
+                      onTap: () => context.push('/history/${w.id}'),
                     )),
             ],
           );

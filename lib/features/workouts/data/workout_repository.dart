@@ -139,7 +139,7 @@ class WorkoutRepository {
     await db.insert('workouts', {
       'id': newWorkoutId,
       'date': DateTime.now().toIso8601String(),
-      'name': source?.name != null ? '${source!.name} (kopie)' : null,
+      'name': source?.name,
       'note': null,
     });
     final wes = await getWorkoutExercises(sourceId);
