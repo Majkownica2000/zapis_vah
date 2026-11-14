@@ -106,6 +106,11 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
         title: const Text('Trenink'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.home),
+            tooltip: 'Hlavni menu',
+            onPressed: () => context.go('/'),
+          ),
+          IconButton(
             icon: const Icon(Icons.save),
             onPressed: () => context.go('/'),
           ),

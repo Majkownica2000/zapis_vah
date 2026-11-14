@@ -49,6 +49,11 @@ class _WorkoutDetailScreenState extends ConsumerState<WorkoutDetailScreen> {
         title: const Text('Detail treninku'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.home),
+            tooltip: 'Hlavni menu',
+            onPressed: () => context.go('/'),
+          ),
+          IconButton(
             icon: const Icon(Icons.copy),
             tooltip: 'Zopakovat',
             onPressed: () async {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/providers.dart';
 
@@ -16,7 +17,16 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   Widget build(BuildContext context) {
     final repo = ref.watch(workoutRepositoryProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Historie')),
+      appBar: AppBar(
+        title: const Text('Historie'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home),
+            tooltip: 'Hlavni menu',
+            onPressed: () => context.go('/'),
+          ),
+        ],
+      ),
       body: FutureBuilder(
         future: repo.getWorkouts(),
         builder: (context, snapshot) {
