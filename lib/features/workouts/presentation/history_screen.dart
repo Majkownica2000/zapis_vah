@@ -22,7 +22,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.home),
-            tooltip: 'Hlavni menu',
+            tooltip: 'Hlavní menu',
             onPressed: () => context.go('/'),
           ),
         ],
@@ -32,7 +32,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         builder: (context, snapshot) {
           final workouts = snapshot.data ?? [];
           if (workouts.isEmpty) {
-            return const Center(child: Text('Zatim zadny trenink.'));
+            return const Center(child: Text('Zatím žádný trénink.'));
           }
           return ListView.builder(
             itemCount: workouts.length,

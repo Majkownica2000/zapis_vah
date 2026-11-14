@@ -48,11 +48,11 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Prejmenovat trenink'),
-        content: TextField(controller: ctrl, decoration: const InputDecoration(labelText: 'Nazev')),
+        title: const Text('Přejmenovat trénink'),
+        content: TextField(controller: ctrl, decoration: const InputDecoration(labelText: 'Název')),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrusit')),
-          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Ulozit')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrušit')),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Uložit')),
         ],
       ),
     );
@@ -70,11 +70,11 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
       final go = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Zadne cviky'),
-          content: const Text('Nejdriv pridej cviky v knihovne.'),
+          title: const Text('Žádné cviky'),
+          content: const Text('Nejdřív přidej cviky v knihovně.'),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrusit')),
-            FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Otevrit knihovnu')),
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrušit')),
+            FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Otevřít knihovnu')),
           ],
         ),
       );
@@ -84,7 +84,7 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
     final selected = await showDialog<String>(
       context: context,
       builder: (ctx) => SimpleDialog(
-        title: const Text('Vyber cvik'),
+        title: const Text('Výběr cviku'),
         children: [
           for (final e in exercises)
             SimpleDialogOption(
@@ -126,16 +126,16 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text(_workout?.displayName ?? 'Trenink'),
+        title: Text(_workout?.displayName ?? 'Trénink'),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            tooltip: 'Prejmenovat',
+            tooltip: 'Přejmenovat',
             onPressed: _renameWorkout,
           ),
           IconButton(
             icon: const Icon(Icons.home),
-            tooltip: 'Hlavni menu',
+            tooltip: 'Hlavní menu',
             onPressed: () => context.go('/'),
           ),
           IconButton(
@@ -158,7 +158,7 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
           FilledButton.icon(
             onPressed: _addExercise,
             icon: const Icon(Icons.add),
-            label: const Text('Pridat cvik'),
+            label: const Text('Přidat cvik'),
           ),
         ],
       ),
@@ -193,15 +193,15 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
             TextButton.icon(
               onPressed: () => _addSet(we.id, SetType.warmup),
               icon: const Icon(Icons.add, size: 18),
-              label: const Text('Warm-up serie'),
+              label: const Text('Warm-up série'),
             ),
             const SizedBox(height: 4),
-            const Text('Pracovni serie', style: TextStyle(fontWeight: FontWeight.w600)),
+            const Text('Pracovní série', style: TextStyle(fontWeight: FontWeight.w600)),
             ...workings.map((s) => _setRow(s)),
             TextButton.icon(
               onPressed: () => _addSet(we.id, SetType.working),
               icon: const Icon(Icons.add, size: 18),
-              label: const Text('Pracovni serie'),
+              label: const Text('Pracovní série'),
             ),
           ],
         ),
@@ -219,7 +219,7 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
             child: TextFormField(
               initialValue: s.weight == 0 ? '' : s.weight.toString(),
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: const InputDecoration(labelText: 'vaha'),
+              decoration: const InputDecoration(labelText: 'váha'),
               onChanged: (v) {
                 s.weight = double.tryParse(v) ?? 0;
               },
@@ -245,7 +245,7 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
           Expanded(
             child: TextFormField(
               initialValue: s.note,
-              decoration: const InputDecoration(labelText: 'poznamka'),
+              decoration: const InputDecoration(labelText: 'poznámka'),
               onChanged: (v) {
                 s.note = v;
               },

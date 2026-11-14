@@ -12,11 +12,11 @@ class SettingsScreen extends ConsumerWidget {
     final state = ref.watch(settingsControllerProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nastaveni'),
+        title: const Text('Nastavení'),
         actions: [
           IconButton(
             icon: const Icon(Icons.home),
-            tooltip: 'Hlavni menu',
+            tooltip: 'Hlavní menu',
             onPressed: () => context.go('/'),
           ),
         ],

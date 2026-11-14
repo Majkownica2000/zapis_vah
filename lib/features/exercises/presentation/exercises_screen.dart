@@ -48,18 +48,18 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Novy cvik'),
+        title: const Text('Nový cvik'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Nazev')),
+            TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Název')),
             const SizedBox(height: 8),
-            TextField(controller: muscleCtrl, decoration: const InputDecoration(labelText: 'Svalova skupina (volitelne)')),
+            TextField(controller: muscleCtrl, decoration: const InputDecoration(labelText: 'Svalová skupina (volitelné)')),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrusit')),
-          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Pridat')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrušit')),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Přidat')),
         ],
       ),
     );
@@ -85,7 +85,7 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.home),
-            tooltip: 'Hlavni menu',
+            tooltip: 'Hlavní menu',
             onPressed: () => context.go('/'),
           ),
         ],

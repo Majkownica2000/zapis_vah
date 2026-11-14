@@ -8,7 +8,7 @@ class Workout {
 
   String get displayName => (name != null && name!.trim().isNotEmpty)
       ? name!.trim()
-      : 'Trenink ${date.day}.${date.month}.';
+      : 'Trénink ${date.day}.${date.month}.';
 
   Map<String, dynamic> toMap() => {
         'id': id,

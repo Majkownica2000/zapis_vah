@@ -48,11 +48,11 @@ class _WorkoutDetailScreenState extends ConsumerState<WorkoutDetailScreen> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Prejmenovat trenink'),
-        content: TextField(controller: ctrl, decoration: const InputDecoration(labelText: 'Nazev')),
+        title: const Text('Přejmenovat trénink'),
+        content: TextField(controller: ctrl, decoration: const InputDecoration(labelText: 'Název')),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrusit')),
-          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Ulozit')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrušit')),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Uložit')),
         ],
       ),
     );
@@ -69,16 +69,16 @@ class _WorkoutDetailScreenState extends ConsumerState<WorkoutDetailScreen> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text(_workout?.displayName ?? 'Detail treninku'),
+        title: Text(_workout?.displayName ?? 'Detail tréninku'),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            tooltip: 'Prejmenovat',
+            tooltip: 'Přejmenovat',
             onPressed: _renameWorkout,
           ),
           IconButton(
             icon: const Icon(Icons.home),
-            tooltip: 'Hlavni menu',
+            tooltip: 'Hlavní menu',
             onPressed: () => context.go('/'),
           ),
           IconButton(

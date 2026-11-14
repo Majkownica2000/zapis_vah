@@ -1,8 +1,8 @@
-# Zapis vah (Flutter)
+# Zápis váh (Flutter)
 
 > Tato aplikace je z většiny vytvořena vibe codingem (AI asistovaný vývoj).
 
-Jednoduchá aplikace pro zapisování vah pri cvičení v gymu.
+Jednoduchá aplikace pro zapisování vah při cvičení v gymu.
 
 ## Funkce (MVP)
 - Nový trénink, přidání cviku z knihovny
@@ -11,7 +11,7 @@ Jednoduchá aplikace pro zapisování vah pri cvičení v gymu.
 - Zopakování tréninku (zkopírování cviků a sérií)
 - Nastavení jednotek (kg/lb)
 
-## Spusteni
+## Spuštění
 1. Nainstaluj Flutter SDK (https://docs.flutter.dev/get-started/install)
 2. V adresáři projektu:
    ```

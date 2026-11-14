@@ -12,7 +12,7 @@ class HomeScreen extends ConsumerWidget {
     final repo = ref.watch(workoutRepositoryProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Zapis vah'),
+        title: const Text('Zápis váh'),
         actions: [
           IconButton(
             icon: const Icon(Icons.fitness_center),
@@ -41,15 +41,15 @@ class HomeScreen extends ConsumerWidget {
                   final ok = await showDialog<bool>(
                     context: context,
                     builder: (ctx) => AlertDialog(
-                      title: const Text('Novy trenink'),
+                      title: const Text('Nový trénink'),
                       content: TextField(
                         controller: nameCtrl,
-                        decoration: const InputDecoration(labelText: 'Nazev (volitelne)'),
+                        decoration: const InputDecoration(labelText: 'Název (volitelné)'),
                         autofocus: true,
                       ),
                       actions: [
-                        TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrusit')),
-                        FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Vytvorit')),
+                        TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrušit')),
+                        FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Vytvořit')),
                       ],
                     ),
                   );
@@ -60,14 +60,14 @@ class HomeScreen extends ConsumerWidget {
                   }
                 },
                 icon: const Icon(Icons.add),
-                label: const Text('Novy trenink'),
+                label: const Text('Nový trénink'),
               ),
               const SizedBox(height: 16),
-              Text('Posledni treninky',
+              Text('Poslední tréninky',
                   style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               if (workouts.isEmpty)
-                const Text('Zatim zadny trenink.')
+                const Text('Zatím žádný trénink.')
               else
                 ...workouts.take(5).map((w) => ListTile(
                       title: Text(w.displayName),

@@ -9,7 +9,7 @@ class ZapisVahApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Zapis vah',
+      title: 'Zápis váh',
       theme: AppTheme.light(),
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,

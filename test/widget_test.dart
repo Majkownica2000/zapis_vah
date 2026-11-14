@@ -8,6 +8,6 @@ void main() {
   testWidgets('App builds', (WidgetTester tester) async {
     await tester.pumpWidget(const ProviderScope(child: ZapisVahApp()));
     await tester.pump();
-    expect(find.text('Zapis vah'), findsOneWidget);
+    expect(find.text('Zápis váh'), findsOneWidget);
   });
 }
