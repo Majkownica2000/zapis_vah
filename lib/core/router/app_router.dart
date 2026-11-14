@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 
+import '../../core/widgets/scaffold_with_nav_bar.dart';
 import '../../features/exercises/presentation/exercises_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/workouts/presentation/history_screen.dart';
@@ -10,9 +11,26 @@ import '../../features/workouts/presentation/workout_screen.dart';
 final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const HomeScreen(),
+    ShellRoute(
+      builder: (context, state, child) => ScaffoldWithNavBar(child: child),
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(
+          path: '/history',
+          builder: (context, state) => const HistoryScreen(),
+        ),
+        GoRoute(
+          path: '/exercises',
+          builder: (context, state) => const ExercisesScreen(),
+        ),
+        GoRoute(
+          path: '/settings',
+          builder: (context, state) => const SettingsScreen(),
+        ),
+      ],
     ),
     GoRoute(
       path: '/workout/:id',
@@ -22,23 +40,11 @@ final appRouter = GoRouter(
       },
     ),
     GoRoute(
-      path: '/exercises',
-      builder: (context, state) => const ExercisesScreen(),
-    ),
-    GoRoute(
-      path: '/history',
-      builder: (context, state) => const HistoryScreen(),
-    ),
-    GoRoute(
       path: '/history/:id',
       builder: (context, state) {
         final id = state.pathParameters['id']!;
         return WorkoutDetailScreen(workoutId: id);
       },
-    ),
-    GoRoute(
-      path: '/settings',
-      builder: (context, state) => const SettingsScreen(),
     ),
   ],
 );

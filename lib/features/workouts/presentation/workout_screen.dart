@@ -210,10 +210,20 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
   }
 
   Widget _setRow(SetEntry s) {
+    final isWarmup = s.type == SetType.warmup;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
+          Container(
+            width: 4,
+            height: 44,
+            decoration: BoxDecoration(
+              color: isWarmup ? const Color(0xFF0D9488) : const Color(0xFFF97316),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 8),
           SizedBox(
             width: 80,
             child: TextFormField(
