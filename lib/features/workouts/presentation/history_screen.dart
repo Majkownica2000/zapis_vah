@@ -39,8 +39,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             itemBuilder: (ctx, i) {
               final w = workouts[i];
               return ListTile(
-                title: Text(w.date.toLocal().toString().split(' ').first),
-                subtitle: Text(w.note ?? ''),
+                title: Text(w.displayName),
+                subtitle: Text('${w.date.toLocal().toString().split(' ').first}${w.note != null && w.note!.isNotEmpty ? "  –  ${w.note}" : ""}'),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => context.go('/history/${w.id}'),
               );

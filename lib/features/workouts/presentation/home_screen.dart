@@ -37,8 +37,27 @@ class HomeScreen extends ConsumerWidget {
             children: [
               FilledButton.icon(
                 onPressed: () async {
-                  final id = await repo.createWorkout();
-                  if (context.mounted) context.go('/workout/$id');
+                  final nameCtrl = TextEditingController();
+                  final ok = await showDialog<bool>(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text('Novy trenink'),
+                      content: TextField(
+                        controller: nameCtrl,
+                        decoration: const InputDecoration(labelText: 'Nazev (volitelne)'),
+                        autofocus: true,
+                      ),
+                      actions: [
+                        TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrusit')),
+                        FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Vytvorit')),
+                      ],
+                    ),
+                  );
+                  if (ok == true && context.mounted) {
+                    final id = await repo.createWorkout(
+                        name: nameCtrl.text.trim().isEmpty ? null : nameCtrl.text.trim());
+                    if (context.mounted) context.go('/workout/$id');
+                  }
                 },
                 icon: const Icon(Icons.add),
                 label: const Text('Novy trenink'),
@@ -51,8 +70,8 @@ class HomeScreen extends ConsumerWidget {
                 const Text('Zatim zadny trenink.')
               else
                 ...workouts.take(5).map((w) => ListTile(
-                      title: Text(w.date.toLocal().toString().split(' ').first),
-                      subtitle: Text(w.note ?? ''),
+                      title: Text(w.displayName),
+                      subtitle: Text(w.date.toLocal().toString().split(' ').first),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => context.go('/history/${w.id}'),
                     )),

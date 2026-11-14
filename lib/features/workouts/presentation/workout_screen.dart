@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/providers.dart';
 import '../data/set_entry.dart';
+import '../data/workout.dart';
 import '../data/workout_exercise.dart';
 
 class WorkoutScreen extends ConsumerStatefulWidget {
@@ -17,6 +18,7 @@ class WorkoutScreen extends ConsumerStatefulWidget {
 class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
   List<WorkoutExercise> _items = [];
   final Map<String, List<SetEntry>> _sets = {};
+  Workout? _workout;
   bool _loading = true;
 
   @override
@@ -28,6 +30,7 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
   Future<void> _reload() async {
     setState(() => _loading = true);
     final repo = ref.read(workoutRepositoryProvider);
+    _workout = await repo.getWorkout(widget.workoutId);
     final items = await repo.getWorkoutExercises(widget.workoutId);
     _sets.clear();
     for (final we in items) {
@@ -37,6 +40,26 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
       _items = items;
       _loading = false;
     });
+  }
+
+  Future<void> _renameWorkout() async {
+    if (_workout == null) return;
+    final ctrl = TextEditingController(text: _workout!.name ?? '');
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Prejmenovat trenink'),
+        content: TextField(controller: ctrl, decoration: const InputDecoration(labelText: 'Nazev')),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrusit')),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Ulozit')),
+        ],
+      ),
+    );
+    if (ok == true) {
+      await ref.read(workoutRepositoryProvider).renameWorkout(widget.workoutId, ctrl.text.trim().isEmpty ? null : ctrl.text.trim());
+      await _reload();
+    }
   }
 
   Future<void> _addExercise() async {
@@ -103,8 +126,13 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trenink'),
+        title: Text(_workout?.displayName ?? 'Trenink'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'Prejmenovat',
+            onPressed: _renameWorkout,
+          ),
           IconButton(
             icon: const Icon(Icons.home),
             tooltip: 'Hlavni menu',

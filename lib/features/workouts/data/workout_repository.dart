@@ -23,15 +23,22 @@ class WorkoutRepository {
     return Workout.fromMap(rows.first);
   }
 
-  Future<String> createWorkout({String? note}) async {
+  Future<String> createWorkout({String? name, String? note}) async {
     final db = await _db.database;
     final id = _uuid.v4();
     await db.insert('workouts', {
       'id': id,
       'date': DateTime.now().toIso8601String(),
+      'name': name,
       'note': note,
     });
     return id;
+  }
+
+  Future<void> renameWorkout(String id, String? name) async {
+    final db = await _db.database;
+    await db.update('workouts', {'name': name},
+        where: 'id = ?', whereArgs: [id]);
   }
 
   Future<void> deleteWorkout(String id) async {
@@ -127,10 +134,12 @@ class WorkoutRepository {
 
   Future<String> cloneWorkout(String sourceId) async {
     final db = await _db.database;
+    final source = await getWorkout(sourceId);
     final newWorkoutId = _uuid.v4();
     await db.insert('workouts', {
       'id': newWorkoutId,
       'date': DateTime.now().toIso8601String(),
+      'name': source?.name != null ? '${source!.name} (kopie)' : null,
       'note': null,
     });
     final wes = await getWorkoutExercises(sourceId);

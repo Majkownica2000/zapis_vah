@@ -6,7 +6,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const _dbName = 'zapis_vah.db';
-  static const _dbVersion = 1;
+  static const _dbVersion = 2;
 
   Database? _db;
 
@@ -34,6 +34,7 @@ class DatabaseHelper {
           CREATE TABLE workouts (
             id TEXT PRIMARY KEY,
             date TEXT NOT NULL,
+            name TEXT,
             note TEXT
           )
         ''');
@@ -56,6 +57,11 @@ class DatabaseHelper {
             note TEXT
           )
         ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute('ALTER TABLE workouts ADD COLUMN name TEXT');
+        }
       },
     );
   }
