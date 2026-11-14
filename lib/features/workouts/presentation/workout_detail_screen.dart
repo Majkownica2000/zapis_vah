@@ -54,6 +54,11 @@ class _WorkoutDetailScreenState extends ConsumerState<WorkoutDetailScreen> {
             onPressed: () => context.go('/'),
           ),
           IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'Upravit',
+            onPressed: () => context.push('/workout/${widget.workoutId}'),
+          ),
+          IconButton(
             icon: const Icon(Icons.copy),
             tooltip: 'Zopakovat',
             onPressed: () async {

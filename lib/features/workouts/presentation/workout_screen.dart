@@ -112,7 +112,13 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.save),
-            onPressed: () => context.go('/'),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/');
+              }
+            },
           ),
         ],
       ),
