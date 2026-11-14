@@ -97,7 +97,7 @@ class WorkoutRepository {
     final rows = await db.query('sets',
         where: 'workoutExerciseId = ?',
         whereArgs: [workoutExerciseId],
-        orderBy: 'setIndex ASC');
+        orderBy: "CASE type WHEN 'WARMUP' THEN 0 ELSE 1 END, setIndex ASC");
     return rows.map(SetEntry.fromMap).toList();
   }
 
