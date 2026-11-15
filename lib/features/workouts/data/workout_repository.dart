@@ -23,12 +23,12 @@ class WorkoutRepository {
     return Workout.fromMap(rows.first);
   }
 
-  Future<String> createWorkout({String? name, String? note}) async {
+  Future<String> createWorkout({String? name, String? note, DateTime? date}) async {
     final db = await _db.database;
     final id = _uuid.v4();
     await db.insert('workouts', {
       'id': id,
-      'date': DateTime.now().toIso8601String(),
+      'date': (date ?? DateTime.now()).toIso8601String(),
       'name': name,
       'note': note,
     });

@@ -4,6 +4,7 @@ import 'db/database_helper.dart';
 import '../features/exercises/data/exercise_repository.dart';
 import '../features/settings/data/settings_repository.dart';
 import '../features/workouts/data/workout_repository.dart';
+import 'services/backup_service.dart';
 
 final databaseHelperProvider = Provider<DatabaseHelper>((ref) => DatabaseHelper.instance);
 
@@ -17,4 +18,11 @@ final workoutRepositoryProvider = Provider<WorkoutRepository>((ref) {
 
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   return SettingsRepository();
+});
+
+final backupServiceProvider = Provider<BackupService>((ref) {
+  return BackupService(
+    ref.watch(exerciseRepositoryProvider),
+    ref.watch(workoutRepositoryProvider),
+  );
 });

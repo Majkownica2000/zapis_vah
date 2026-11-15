@@ -47,13 +47,15 @@ class ExerciseRepository {
         )).toList();
   }
 
-  Future<void> add(String name, {String? muscleGroupId}) async {
+  Future<String> add(String name, {String? muscleGroupId}) async {
     final db = await _db.database;
+    final id = _uuid.v4();
     await db.insert('exercises', {
-      'id': _uuid.v4(),
+      'id': id,
       'name': name,
       'muscleGroupId': muscleGroupId,
     });
+    return id;
   }
 
   Future<void> delete(String id) async {

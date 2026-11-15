@@ -1,7 +1,13 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
+import '../../../core/providers.dart';
 import 'settings_controller.dart';
 
 String _themeLabel(ThemeMode mode) {
@@ -69,6 +75,60 @@ class SettingsScreen extends ConsumerWidget {
                   }
                 },
               ),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.upload_file),
+              title: const Text('Exportovat data'),
+              subtitle: const Text('Uložit zálohu do souboru'),
+              onTap: () async {
+                try {
+                  final json = await ref.read(backupServiceProvider).exportJson();
+                  final dir = await getTemporaryDirectory();
+                  final file = File('${dir.path}/zapis_vah_backup.json');
+                  await file.writeAsString(json);
+                  await Share.shareXFiles([XFile(file.path)], text: 'Záloha Zápis vah');
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Export dokončen')),
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Chyba exportu: $e')),
+                    );
+                  }
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.download),
+              title: const Text('Importovat data'),
+              subtitle: const Text('Nahrát zálohu ze souboru'),
+              onTap: () async {
+                try {
+                  final result = await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['json'],
+                  );
+                  if (result == null || result.files.single.path == null) return;
+                  final file = File(result.files.single.path!);
+                  final json = await file.readAsString();
+                  await ref.read(backupServiceProvider).importJson(json);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Import dokončen')),
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Chyba importu: $e')),
+                    );
+                  }
+                }
+              },
             ),
           ],
         ),
