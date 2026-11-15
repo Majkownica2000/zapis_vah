@@ -1,12 +1,13 @@
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 class DatabaseHelper {
   DatabaseHelper._();
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const _dbName = 'zapis_vah.db';
-  static const _dbVersion = 2;
+  static const _dbVersion = 3;
 
   Database? _db;
 
@@ -27,9 +28,19 @@ class DatabaseHelper {
           CREATE TABLE exercises (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
-            muscleGroup TEXT
+            muscleGroupId TEXT
           )
         ''');
+        await db.execute('''
+          CREATE TABLE muscle_groups (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL
+          )
+        ''');
+        const defaults = ['Hrudník', 'Záda', 'Nohy', 'Ramena', 'Ruce', 'Core', 'Celé tělo', 'Kardio'];
+        for (final n in defaults) {
+          await db.insert('muscle_groups', {'id': const Uuid().v4(), 'name': n});
+        }
         await db.execute('''
           CREATE TABLE workouts (
             id TEXT PRIMARY KEY,
@@ -61,6 +72,47 @@ class DatabaseHelper {
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
           await db.execute('ALTER TABLE workouts ADD COLUMN name TEXT');
+        }
+        if (oldVersion < 3) {
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS muscle_groups (
+              id TEXT PRIMARY KEY,
+              name TEXT NOT NULL
+            )
+          ''');
+          const defaults = ['Hrudník', 'Záda', 'Nohy', 'Ramena', 'Ruce', 'Core', 'Celé tělo', 'Kardio'];
+          for (final n in defaults) {
+            final existing = await db.query('muscle_groups', where: 'name = ?', whereArgs: [n]);
+            if (existing.isEmpty) {
+              await db.insert('muscle_groups', {'id': const Uuid().v4(), 'name': n});
+            }
+          }
+          // add column if missing
+          try {
+            await db.execute('ALTER TABLE exercises ADD COLUMN muscleGroupId TEXT');
+          } catch (_) {}
+          // migrate old text values
+          final rows = await db.query('exercises');
+          final groups = await db.query('muscle_groups');
+          final nameToId = <String, String>{};
+          for (final g in groups) {
+            nameToId[g['name'] as String] = g['id'] as String;
+          }
+          for (final r in rows) {
+            final oldName = r['muscleGroup'] as String?;
+            if (oldName == null || oldName.trim().isEmpty) continue;
+            if (!nameToId.containsKey(oldName)) {
+              final gid = const Uuid().v4();
+              await db.insert('muscle_groups', {'id': gid, 'name': oldName});
+              nameToId[oldName] = gid;
+            }
+            await db.update('exercises', {'muscleGroupId': nameToId[oldName]},
+                where: 'id = ?', whereArgs: [r['id']]);
+          }
+          // drop old column if supported
+          try {
+            await db.execute('ALTER TABLE exercises DROP COLUMN muscleGroup');
+          } catch (_) {}
         }
       },
     );
