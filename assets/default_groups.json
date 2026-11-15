@@ -1,0 +1,13 @@
+{
+  "muscleGroups": [
+    "Hrudník", "Hrudník (horní)", "Hrudník (střední)", "Hrudník (spodní)",
+    "Záda", "Záda (šířka)", "Záda (tloušťka)", "Trapézy", "Spodní záda",
+    "Nohy", "Kvadricepsy", "Hamstringy", "Lýtka", "Hýždě",
+    "Ramena", "Ramena (přední)", "Ramena (střední)", "Ramena (zadní)",
+    "Ruce", "Biceps", "Triceps", "Předloktí",
+    "Core", "Břicho",
+    "Celé tělo", "Kardio"
+  ],
+  "exercises": [],
+  "workouts": []
+}

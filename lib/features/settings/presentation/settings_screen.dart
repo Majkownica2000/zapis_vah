@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
@@ -77,6 +78,28 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
             const Divider(),
+            ListTile(
+              leading: const Icon(Icons.restore),
+              title: const Text('Obnovit výchozí partie'),
+              subtitle: const Text('Přidá výchozí partie (sloučí)'),
+              onTap: () async {
+                try {
+                  final json = await rootBundle.loadString('assets/default_groups.json');
+                  await ref.read(backupServiceProvider).importJson(json);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Výchozí partie obnoveny')),
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Chyba: $e')),
+                    );
+                  }
+                }
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.upload_file),
               title: const Text('Exportovat data'),
