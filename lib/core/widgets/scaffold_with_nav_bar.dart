@@ -19,9 +19,17 @@ class ScaffoldWithNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final idx = _currentIndex(context);
-    return Scaffold(
-      body: child,
-      bottomNavigationBar: NavigationBar(
+    return PopScope(
+      canPop: idx == 0,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (idx != 0) {
+          context.go(_tabs[0]);
+        }
+      },
+      child: Scaffold(
+        body: child,
+        bottomNavigationBar: NavigationBar(
         selectedIndex: idx,
         onDestinationSelected: (i) {
           if (i == idx) return;
@@ -34,6 +42,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
           NavigationDestination(icon: Icon(Icons.settings_outlined), selectedIcon: Icon(Icons.settings), label: 'Nastavení'),
         ],
       ),
+    ),
     );
   }
 }

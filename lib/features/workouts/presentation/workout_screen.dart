@@ -106,13 +106,45 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
   }
 
   Future<void> _deleteSet(String setId) async {
-    await ref.read(workoutRepositoryProvider).deleteSet(setId);
-    await _reload();
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Smazat sérii?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrušit')),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Smazat'),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) {
+      await ref.read(workoutRepositoryProvider).deleteSet(setId);
+      await _reload();
+    }
   }
 
   Future<void> _deleteExercise(String weId) async {
-    await ref.read(workoutRepositoryProvider).removeExerciseFromWorkout(weId);
-    await _reload();
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Odebrat cvik z tréninku?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrušit')),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Odebrat'),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) {
+      await ref.read(workoutRepositoryProvider).removeExerciseFromWorkout(weId);
+      await _reload();
+    }
   }
 
   Future<void> _updateSet(SetEntry s) async {

@@ -224,8 +224,25 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_outline),
                     onPressed: () async {
-                      await ref.read(exerciseRepositoryProvider).delete(e.id);
-                      await _load();
+                      final ok = await showDialog<bool>(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Smazat cvik?'),
+                          content: Text('Opravdu smazat „${e.name}“?'),
+                          actions: [
+                            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrušit')),
+                            FilledButton(
+                              style: FilledButton.styleFrom(backgroundColor: Colors.red),
+                              onPressed: () => Navigator.pop(ctx, true),
+                              child: const Text('Smazat'),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (ok == true) {
+                        await ref.read(exerciseRepositoryProvider).delete(e.id);
+                        await _load();
+                      }
                     },
                   ),
                 );

@@ -99,8 +99,25 @@ class _WorkoutDetailScreenState extends ConsumerState<WorkoutDetailScreen> {
           IconButton(
             icon: const Icon(Icons.delete_outline),
             onPressed: () async {
-              await ref.read(workoutRepositoryProvider).deleteWorkout(widget.workoutId);
-              if (context.mounted) context.go('/history');
+              final ok = await showDialog<bool>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text('Smazat trénink?'),
+                  content: const Text('Tato akce je nevratná.'),
+                  actions: [
+                    TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Zrušit')),
+                    FilledButton(
+                      style: FilledButton.styleFrom(backgroundColor: Colors.red),
+                      onPressed: () => Navigator.pop(ctx, true),
+                      child: const Text('Smazat'),
+                    ),
+                  ],
+                ),
+              );
+              if (ok == true) {
+                await ref.read(workoutRepositoryProvider).deleteWorkout(widget.workoutId);
+                if (context.mounted) context.go('/history');
+              }
             },
           ),
         ],
