@@ -65,7 +65,7 @@ class BackupService {
     }
     final groupsJson = (data['muscleGroups'] as List<dynamic>?) ?? [];
     for (final g in groupsJson) {
-      final name = (g['name'] as String?)?.trim();
+      final name = g is String ? g.trim() : (g['name'] as String?)?.trim();
       if (name == null || name.isEmpty) continue;
       if (!groupMap.containsKey(name)) {
         final id = await _exRepo.addGroup(name);

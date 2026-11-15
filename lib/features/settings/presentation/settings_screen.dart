@@ -1,12 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../core/providers.dart';
 import 'settings_controller.dart';
@@ -107,13 +106,17 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () async {
                 try {
                   final json = await ref.read(backupServiceProvider).exportJson();
-                  final dir = await getTemporaryDirectory();
-                  final file = File('${dir.path}/zapis_vah_backup.json');
-                  await file.writeAsString(json);
-                  await Share.shareXFiles([XFile(file.path)], text: 'Záloha Zápis vah');
+                  final path = await FilePicker.platform.saveFile(
+                    dialogTitle: 'Uložit zálohu',
+                    fileName: 'zapis_vah_backup.json',
+                    type: FileType.custom,
+                    allowedExtensions: ['json'],
+                    bytes: Uint8List.fromList(json.codeUnits),
+                  );
+                  if (path == null) return;
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Export dokončen')),
+                      SnackBar(content: Text('Záloha uložena: $path')),
                     );
                   }
                 } catch (e) {
