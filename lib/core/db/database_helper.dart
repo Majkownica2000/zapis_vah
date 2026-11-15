@@ -7,7 +7,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const _dbName = 'zapis_vah.db';
-  static const _dbVersion = 3;
+  static const _dbVersion = 4;
 
   Database? _db;
 
@@ -37,7 +37,15 @@ class DatabaseHelper {
             name TEXT NOT NULL
           )
         ''');
-        const defaults = ['Hrudník', 'Záda', 'Nohy', 'Ramena', 'Ruce', 'Core', 'Celé tělo', 'Kardio'];
+        const defaults = [
+          'Hrudník', 'Hrudník (horní)', 'Hrudník (střední)', 'Hrudník (spodní)',
+          'Záda', 'Záda (šířka)', 'Záda (tloušťka)', 'Trapézy', 'Spodní záda',
+          'Nohy', 'Kvadricepsy', 'Hamstringy', 'Lýtka', 'Hýždě',
+          'Ramena', 'Ramena (přední)', 'Ramena (střední)', 'Ramena (zadní)',
+          'Ruce', 'Biceps', 'Triceps', 'Předloktí',
+          'Core', 'Břicho',
+          'Celé tělo', 'Kardio',
+        ];
         for (final n in defaults) {
           await db.insert('muscle_groups', {'id': const Uuid().v4(), 'name': n});
         }
@@ -113,6 +121,22 @@ class DatabaseHelper {
           try {
             await db.execute('ALTER TABLE exercises DROP COLUMN muscleGroup');
           } catch (_) {}
+        }
+        if (oldVersion < 4) {
+          const defaults = [
+            'Hrudník (horní)', 'Hrudník (střední)', 'Hrudník (spodní)',
+            'Záda (šířka)', 'Záda (tloušťka)', 'Trapézy', 'Spodní záda',
+            'Kvadricepsy', 'Hamstringy', 'Lýtka', 'Hýždě',
+            'Ramena (přední)', 'Ramena (střední)', 'Ramena (zadní)',
+            'Biceps', 'Triceps', 'Předloktí',
+            'Břicho',
+          ];
+          for (final n in defaults) {
+            final existing = await db.query('muscle_groups', where: 'name = ?', whereArgs: [n]);
+            if (existing.isEmpty) {
+              await db.insert('muscle_groups', {'id': const Uuid().v4(), 'name': n});
+            }
+          }
         }
       },
     );
